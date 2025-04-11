@@ -47,12 +47,28 @@
 {
   "name": "sqli-electron-gui",
   "version": "1.0.0",
+  "description": "SQLi Login Bypass Tool (Electron GUI)",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
+  "author": "bossku",
+  "license": "MIT",
   "dependencies": {
-    "electron": "^27.0.0"
+    "axios": "^1.6.8",
+    "cheerio": "^1.0.0-rc.12",
+    "electron": "^27.0.0",
+    "qs": "^6.11.2"
   }
 }
+
 ```
+# ⚙️ LANGKAH 2
+```bash
+npm install
+npm start
+```
+
+
+
+![test](https://github.com/user-attachments/assets/5bb0604a-aac0-4817-ae5c-cde354489451)
