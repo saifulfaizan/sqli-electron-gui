@@ -40,7 +40,8 @@
 - cd sqli-electron-gui
   ### Init Projek + Install Electron
   - npm init -y
-  - npm install electron
+  - npm install axios cheerio qs electron
+  - 
   ### Update package.json
 ``` json
 {
