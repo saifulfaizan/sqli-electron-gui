@@ -1,6 +1,7 @@
-// 📁 sqli-electron-gui/preload.js
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  testSQLi: (url) => ipcRenderer.invoke('sqli:test', url)
+  runSQLi: (url) => ipcRenderer.send('run-sqli', url),
+  runPowerExtreme: (url) => ipcRenderer.invoke('scanner:powerExtreme', url),
+  onLog: (callback) => ipcRenderer.on('sqli-log', (_event, line) => callback(line))
 });
