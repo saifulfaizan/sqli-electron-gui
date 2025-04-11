@@ -23,3 +23,14 @@
   - ├── assets/
   - └── logic/
     - └── bypass.js (payload handler)
+
+
+      ## Struktur Projek
+         - 📁 sqli-electron-gui/
+            - ├── package.json
+            - ├── main.js           // Electron Main Process
+            - ├── preload.js        // Bridge ke renderer
+            - ├── index.html        // GUI Utama
+            - ├── renderer.js       // Logik frontend
+            - ├── sqli.js           // SQLi form detector & executor
+            - └── output/           // Folder untuk simpan snapshot
