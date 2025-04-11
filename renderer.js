@@ -1,18 +1,22 @@
-// 📁 sqli-electron-gui/renderer.js
-function runTest() {
-  const url = document.getElementById('urlInput').value;
-  const logBox = document.getElementById('log');
+
+function runPowerExtreme() {
+  const url = document.getElementById('extremeTarget').value.trim();
+  const fullMode = document.getElementById('fullMode').checked;
+  const mode = fullMode ? 'full' : 'auto';
+  const logEl = document.getElementById('extremeLog');
+
+  logEl.textContent = '[*] Memulakan Scanner Power Extreme dalam mode: ' + mode + '\n';
 
   if (!url) {
-    logBox.value = '⚠️ Sila masukkan URL login terlebih dahulu.';
+    logEl.textContent += '[!] Sila masukkan URL sasaran.\n';
     return;
   }
 
-  logBox.value = '🚀 Mula menjalankan SQLi test...\n';
-
-  window.electronAPI.testSQLi(url).then(result => {
-    logBox.value += result.join('\n');
-  }).catch(err => {
-    logBox.value += `❌ Ralat: ${err.message}`;
-  });
+  window.electronAPI.runPowerExtreme(url, mode)
+    .then(lines => {
+      logEl.textContent += lines.join('\n');
+    })
+    .catch(err => {
+      logEl.textContent += '\n[!] Ralat: ' + err.message;
+    });
 }
