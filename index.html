@@ -1,28 +1,24 @@
-<!-- 📁 sqli-electron-gui/index.html -->
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SQLi Login Bypass GUI</title>
+  <meta charset="UTF-8" />
+  <title>SQLi Login Bypass & Extractor</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; background: #f0f0f0; }
-    h1 { font-size: 22px; margin-bottom: 10px; }
-    input, button, textarea {
-      width: 100%; padding: 10px; margin: 10px 0;
-      border: 1px solid #ccc; border-radius: 4px;
-    }
-    button { background: #007bff; color: white; cursor: pointer; }
-    button:hover { background: #0056b3; }
-    #log { background: white; height: 300px; overflow-y: scroll; }
+    body { font-family: sans-serif; background: #f4f4f4; padding: 20px; }
+    .tab-content { margin-top: 20px; }
+    input, button { margin: 10px 0; padding: 8px; width: 100%; }
+    pre { background: #000; color: #0f0; padding: 10px; height: 300px; overflow: auto; font-size: 14px; }
   </style>
 </head>
 <body>
-  <h1>SQLi Login Bypass (Electron GUI)</h1>
-  <input id="urlInput" type="text" placeholder="Masukkan URL login (cth: https://victim.site/login.php)">
-  <button onclick="runTest()">🚀 Mula Test SQLi</button>
-  <textarea id="log" readonly placeholder="Log output akan muncul di sini..."></textarea>
+  <h1>⚙️ SQLi Scanner Power Extreme</h1>
+  <div class="tab-content">
+    <input type="text" id="extremeTarget" placeholder="Masukkan URL sasaran" />
+    <label><input type="checkbox" id="fullMode" /> Gunakan Full Payload Mode</label>
+    <button onclick="runPowerExtreme()">🚀 Mula Full Scan</button>
+    <pre id="extremeLog">💬 Log scanner akan dipaparkan di sini...</pre>
+  </div>
 
   <script src="renderer.js"></script>
 </body>
