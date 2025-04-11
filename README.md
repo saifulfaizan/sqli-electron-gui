@@ -91,4 +91,4 @@ Teknik	Payload contoh	Cara detect
 ✅ DIOS	' UNION SELECT null, table_name FROM information_schema.tables--	Extract table
 ```
 
-![dump](https://github.com/user-attachments/assets/d6942e4c-8e27-415c-b76d-b763c245180d)
+![dumping](https://github.com/user-attachments/assets/d8fee266-b7a0-4530-a36f-ee2eb51ab680)
