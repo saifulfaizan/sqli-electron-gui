@@ -72,3 +72,13 @@ npm start
 
 
 ![test](https://github.com/user-attachments/assets/5bb0604a-aac0-4817-ae5c-cde354489451)
+
+
+#Disable Gpu 
+
+![error](https://github.com/user-attachments/assets/1642b6b0-60d5-45f5-a808-8b06926bd891)
+
+```bash
+set ELECTRON_DISABLE_GPU=1
+npm start
+```
