@@ -34,3 +34,24 @@
             - ├── renderer.js       // Logik frontend
             - ├── sqli.js           // SQLi form detector & executor
             - └── output/           // Folder untuk simpan snapshot
+
+# ⚙️ LANGKAH 1 – Setup Projek Electron
+- mkdir sqli-electron-gui
+- cd sqli-electron-gui
+  ### Init Projek + Install Electron
+  - npm init -y
+  - npm install electron
+  ### Update package.json
+``` json
+{
+  "name": "sqli-electron-gui",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "electron": "^27.0.0"
+  }
+}
+```
