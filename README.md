@@ -85,10 +85,13 @@ node index.js
 ## 👽 Author
 
 **elecTron-X Team**  
-> “Scan smart, inject sharper.”  
+> “Scan Sampai Jadi ”  
 [TikTok](https://www.tiktok.com/@saifulfaizan.my) | [email](saifulfaizan@gmail.com)
 
 ---
+## Output 
+
+![contoh](https://github.com/user-attachments/assets/3ccca2ea-c084-4200-b8b4-09975bbbfaa2)
 
 ## 🧠 Disclaimer
 This project is for **educational and authorized penetration testing** purposes only.  
