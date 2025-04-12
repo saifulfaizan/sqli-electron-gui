@@ -1,7 +1,8 @@
+// preload.js
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  runSQLi: (url) => ipcRenderer.send('run-sqli', url),
-  runPowerExtreme: (url) => ipcRenderer.invoke('scanner:powerExtreme', url),
-  onLog: (callback) => ipcRenderer.on('sqli-log', (_event, line) => callback(line))
+  runLoginBypass: (url) => ipcRenderer.invoke('run-login-bypass', url),
+  runPowerExtreme: (url, mode) => ipcRenderer.invoke('run-power-extreme', { url, mode }),
+  runTronFull: (url) => ipcRenderer.invoke('run-tron-full', url)
 });

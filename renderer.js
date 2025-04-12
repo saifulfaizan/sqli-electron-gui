@@ -1,22 +1,44 @@
+// renderer.js (elecTron GUI logic)
+
+function logTo(id, text) {
+  const el = document.getElementById(id);
+  el.textContent += `\n${text}`;
+  el.scrollTop = el.scrollHeight;
+}
+
+function runLoginBypass() {
+  const url = document.getElementById('loginUrl').value.trim();
+  const logId = 'loginLog';
+  if (!url) return logTo(logId, '[!] Sila masukkan URL login.');
+
+  logTo(logId, `[🚀] Uji login bypass ke: ${url}`);
+
+  window.electronAPI.runLoginBypass(url).then(res => {
+    res.forEach(line => logTo(logId, line));
+  }).catch(err => logTo(logId, `[❌] ${err.message}`));
+}
 
 function runPowerExtreme() {
   const url = document.getElementById('extremeTarget').value.trim();
   const fullMode = document.getElementById('fullMode').checked;
   const mode = fullMode ? 'full' : 'auto';
-  const logEl = document.getElementById('extremeLog');
+  const logId = 'extremeLog';
 
-  logEl.textContent = '[*] Memulakan Scanner Power Extreme dalam mode: ' + mode + '\n';
+  if (!url) return logTo(logId, '[!] Masukkan URL laman utama.');
+  logTo(logId, `[🚀] Mula scan mode: ${mode}`);
 
-  if (!url) {
-    logEl.textContent += '[!] Sila masukkan URL sasaran.\n';
-    return;
-  }
+  window.electronAPI.runPowerExtreme(url, mode).then(logs => {
+    logs.forEach(line => logTo(logId, line));
+  }).catch(err => logTo(logId, `[❌] ${err.message}`));
+}
 
-  window.electronAPI.runPowerExtreme(url, mode)
-    .then(lines => {
-      logEl.textContent += lines.join('\n');
-    })
-    .catch(err => {
-      logEl.textContent += '\n[!] Ralat: ' + err.message;
-    });
+function runTronAttack() {
+  const url = document.getElementById('tronUrl').value.trim();
+  const logId = 'tronLog';
+  if (!url) return logTo(logId, '[!] Masukkan URL laman utama.');
+
+  logTo(logId, `[⚡] Menjalankan TRON full injection ke: ${url}`);
+  window.electronAPI.runTronFull(url).then(logs => {
+    logs.forEach(line => logTo(logId, line));
+  }).catch(err => logTo(logId, `[❌] ${err.message}`));
 }

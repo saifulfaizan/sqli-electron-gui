@@ -1,25 +1,50 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>SQLi Login Bypass & Extractor</title>
-  <style>
-    body { font-family: sans-serif; background: #f4f4f4; padding: 20px; }
-    .tab-content { margin-top: 20px; }
-    input, button { margin: 10px 0; padding: 8px; width: 100%; }
-    pre { background: #000; color: #0f0; padding: 10px; height: 300px; overflow: auto; font-size: 14px; }
-  </style>
+  <title>elecTron Scanner X</title>
+  <link rel="stylesheet" href="tron-theme.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h1>⚙️ SQLi Scanner Power Extreme</h1>
-  <div class="tab-content">
-    <input type="text" id="extremeTarget" placeholder="Masukkan URL sasaran" />
-    <label><input type="checkbox" id="fullMode" /> Gunakan Full Payload Mode</label>
-    <button onclick="runPowerExtreme()">🚀 Mula Full Scan</button>
-    <pre id="extremeLog">💬 Log scanner akan dipaparkan di sini...</pre>
+  <h1>⚡ elecTron Scanner X</h1>
+
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('login')">🛡️ Login Bypass</div>
+    <div class="tab" onclick="showTab('scanner')">💥 Scanner Power Mode</div>
+    <div class="tab" onclick="showTab('tron')">⚙️ TRON Full Attack</div>
+  </div>
+
+  <div class="tab-content" id="login" style="display: block;">
+    <h3>🛡️ Login Bypass</h3>
+    <input type="text" id="loginUrl" placeholder="Masukkan URL login">
+    <button onclick="runLoginBypass()">🚀 Mula Bypass</button>
+    <pre id="loginLog">Log login bypass akan dipaparkan di sini...</pre>
+  </div>
+
+  <div class="tab-content" id="scanner" style="display: none;">
+    <h3>💥 Scanner Power Mode</h3>
+    <input type="text" id="extremeTarget" placeholder="Masukkan URL laman utama">
+    <label><input type="checkbox" id="fullMode"> Guna Full Payload Mode</label>
+    <button onclick="runPowerExtreme()">🚀 Mula Scan</button>
+    <pre id="extremeLog">Log scanner akan dipaparkan di sini...</pre>
+  </div>
+
+  <div class="tab-content" id="tron" style="display: none;">
+    <h3>⚙️ TRON Full Attack</h3>
+    <input type="text" id="tronUrl" placeholder="Masukkan URL utama (crawler + inject)">
+    <button onclick="runTronAttack()">⚡ Laksanakan TRON Inject</button>
+    <pre id="tronLog">Log TRON akan dipaparkan di sini...</pre>
   </div>
 
   <script src="renderer.js"></script>
+  <script>
+    function showTab(tab) {
+      document.querySelectorAll('.tab-content').forEach(div => div.style.display = 'none');
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(tab).style.display = 'block';
+      document.querySelector(`.tab[onclick="showTab('${tab}')"]`).classList.add('active');
+    }
+  </script>
 </body>
 </html>
