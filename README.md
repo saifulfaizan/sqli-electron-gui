@@ -45,3 +45,51 @@
 🔁 Trying injection with GET...
 💥 Injection successful (Time-based) on field: email
 💾 Dump saved to: output/dump-1712912001234.txt
+```
+
+---
+
+## 🖥️ Tech Stack
+
+- ⚙️ Node.js + Electron (GUI)
+- 🔎 Axios + Cheerio (web scanning)
+- 🧪 Modular Engine System (`/scanner/engine-*`)
+- 💾 File Output System
+
+---
+
+## ⚔️ Coming Soon
+
+- 🔐 Hash Cracker (MD5 / SHA1 / bcrypt)
+- 🌐 Dork Generator + Auto Scanner
+- 🕸️ Crawler + Admin Page Finder
+- 🧩 Boolean-based & Out-of-Band modules
+
+---
+
+## 💻 Usage
+
+```bash
+# Install dependencies
+npm install
+
+# Run GUI version
+npm start
+
+# OR CLI version (in dev)
+node index.js
+```
+
+---
+
+## 👽 Author
+
+**elecTron-X Team**  
+> “Scan smart, inject sharper.”  
+[TikTok](https://www.tiktok.com/@saifulfaizan.my) | [email](saifulfaizan@gmail.com)
+
+---
+
+## 🧠 Disclaimer
+This project is for **educational and authorized penetration testing** purposes only.  
+Unauthorized usage against systems you do not own is **strictly prohibited**.
